@@ -7,5 +7,6 @@ export class Shape {
         this.y = Math.random()*HEIGHT - HEIGHT / 2;
         this.d = 10;
         this.color = "blue";
+        this.direction;
     }
 }

@@ -27,8 +27,9 @@ export const App = () => {
           shapes.set(objkey, new Shape(objkey));
         }
         const s = shapes.get(objkey);
+        const elapsed = Date.now() - s.time.getTime();
         p5.fill(s.color);
-        p5.circle(s.x, s.y, s.d);
+        p5.circle(s.x, s.y, s.d*(1+elapsed / (1000 * 60 * 10)));
       });
 
       for (const shape of shapes.values()) {
