@@ -25,22 +25,6 @@ export const App = () => {
       }
     }
   };
-
-  function makeShape() {
-    const x = 0;
-    const y = 0;
-    const pi = Math.PI;
-    const radius = 30;
-    let pointArray = [];
-    for (let i = 0; i < 20; i ++) {
-      const radians = i * pi / 10;
-      let new_x = x + (radius + (Math.random()*10 - 5)) * Math.cos(radians);
-      let new_y = y + (radius + (Math.random()*10 - 5)) * Math.sin(radians);
-      pointArray.push([new_x, new_y]);
-    }
-    return pointArray;
-  };
-
   function sketch(p5) {
     p5.setup = () => p5.createCanvas(WIDTH, HEIGHT, p5.WEBGL);
   
@@ -57,16 +41,15 @@ export const App = () => {
         const elapsed = Date.now() - s.time.getTime();
         const color = s.updateColor();
         p5.fill(color);
-        p5.circle(s.x, s.y, s.d*(1+elapsed / (1000 * 60 * 10)));
+        /* p5.circle(s.x, s.y, s.radius*(1+elapsed / (1000 * 60 * 10))); */
+        p5.beginShape();
+        s.pointArray.map((point) => {
+          p5.curveVertex(point[0], point[1]);
+        });
+        p5.endShape();
       });
+      
 
-      const dummyshape = makeShape();
-      console.log(dummyshape);
-      p5.beginShape();
-      dummyshape.map((point) => {
-        p5.curveVertex(point[0], point[1]);
-      });
-      p5.endShape();
 
       clearShapes();
     };
