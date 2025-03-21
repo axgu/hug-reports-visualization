@@ -5,7 +5,7 @@ export class Shape {
         this.time = new Date();
         this.x = Math.random()*WIDTH - WIDTH / 2;
         this.y = Math.random()*HEIGHT - HEIGHT / 2;
-        this.d = 10;
+        this.d = 20;
         this.color_palette = COLORS[Math.floor(Math.random()*COLORS.length)];
         this.color = '#' + this.color_palette[0];
         this.direction;
