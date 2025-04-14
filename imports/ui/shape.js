@@ -5,45 +5,69 @@ export class Shape {
         this.time = new Date();
         this.x = Math.random()*WIDTH - WIDTH / 2;
         this.y = Math.random()*HEIGHT - HEIGHT / 2;
-        this.radius = 20;
+        this.start_radius = 20;
+        this.radius = 10;
+        this.max_r = 3;
+        this.theta = 0;
         this.color_palette = COLORS[Math.floor(Math.random()*COLORS.length)];
         this.color = '#' + this.color_palette[0];
-        this.pointArray = this.makeShape2();
+        this.numpoints = 6;
+        this.offArray = this.makeRadii();
+        this.pointArray = this.makePoints();
         this.direction;
     }
 
-    makeShape2() {
-      const numpoints = 6;
-      let pointArray = [];
-      let x_rad;
-      let y_rad;
+    makeRadii() {
+      let offArray = [];
+      let x_off;
+      let y_off;
       let scale = 1.5;
-      for (let i = 0; i < numpoints; i++) {
+      for (let i = 0; i < this.numpoints; i++) {
         for (let j = 0; j < 4; j++) {
-          const radians = 2* (i*4+j) * Math.PI / (numpoints * 4);
-          console.log(i*4+j);
           if (j == 0) {
-            x_rad = this.radius + Math.random()*scale;
-            y_rad = this.radius + Math.random()*scale;
+            x_off = Math.random()*scale;
+            y_off = Math.random()*scale;
           } else if (j == 1) {
-            x_rad = this.radius + Math.random()*scale + scale;
-            y_rad = this.radius + Math.random()*scale + scale;
+            x_off = Math.random()*scale + scale;
+            y_off = Math.random()*scale + scale;
           } else if (j == 2) {
-            x_rad = this.radius + Math.random()*scale;
-            y_rad = this.radius + Math.random()*scale;
+            x_off = Math.random()*scale;
+            y_off = Math.random()*scale;
           } else {
-            x_rad = this.radius - Math.random()*scale - scale;
-            y_rad = this.radius - Math.random()*scale - scale;
+            x_off = -Math.random()*scale - scale;
+            y_off = -Math.random()*scale - scale;
           }
-          const new_x = this.x + x_rad * Math.cos(radians);
-          const new_y = this.y + y_rad * Math.sin(radians);
-          pointArray.push([new_x, new_y]);
+          offArray.push([x_off, y_off]);
         }
       }
-      const new_x = this.x + this.radius * Math.cos(0);
-      const new_y = this.y + this.radius * Math.sin(0);
-      pointArray.push([new_x, new_y]);
-      console.log(pointArray);
+      offArray.push(offArray[0]);
+      console.log(offArray);
+      return offArray;
+    }
+
+    makePoints() {
+      let pointArray = [];
+      for (let i = 0; i < this.numpoints; i++) {
+        for (let j = 0; j < 4; j++) {
+          const radians = 2* (i*4+j) * Math.PI / (this.numpoints * 4);
+          const x_off = this.offArray[4*i + j][0];
+          const y_off = this.offArray[4*i + j][1];
+          const x_rad = this.radius + x_off;
+          const y_rad = this.radius + y_off;
+          const new_x = this.x + x_rad * Math.cos(radians);
+          const new_y = this.y + y_rad * Math.sin(radians);
+          pointArray.push([new_x, new_y])
+        }
+      }
+      
+      const x_off = this.offArray[24][0];
+      const y_off = this.offArray[24][1];
+      const x_rad = this.radius + x_off;
+      const y_rad = this.radius + y_off;
+      const new_x = this.x + x_rad * Math.cos(0);
+      const new_y = this.y + y_rad * Math.sin(0);
+      pointArray.push([new_x, new_y])
+      
       return pointArray;
     }
     

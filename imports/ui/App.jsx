@@ -41,15 +41,19 @@ export const App = () => {
         const elapsed = Date.now() - s.time.getTime();
         const color = s.updateColor();
         p5.fill(color);
-        /* p5.circle(s.x, s.y, s.radius*(1+elapsed / (1000 * 60 * 10))); */
+        
         p5.beginShape();
         s.pointArray.map((point) => {
           p5.curveVertex(point[0], point[1]);
         });
         p5.endShape();
       });
-      
 
+      shapes.forEach((shape, key) => {
+        shape.radius = shape.start_radius + shape.max_r * p5.sin(shape.theta);
+        shape.theta += .05;
+        shape.pointArray = shape.makePoints();
+      })
 
       clearShapes();
     };
