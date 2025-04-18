@@ -39,9 +39,18 @@ export class Shape {
             y_off = -Math.random()*scale - scale;
           }
           offArray.push([x_off, y_off]);
+          /*
+          if (i == 0 && j == 0) {
+            offArray.push([x_off, y_off]);
+          }
+          */
         }
       }
-      // offArray.push(offArray[0]);
+      // offArray.push(offArray[offArray.length - 1]);
+
+      for (let i = 0; i < 3; i++) {
+        offArray.push(offArray[i]);
+      }
       return offArray;
     }
 
@@ -57,7 +66,16 @@ export class Shape {
           const new_x = this.x + x_rad * Math.cos(radians);
           const new_y = this.y + y_rad * Math.sin(radians);
           pointArray.push([new_x, new_y])
+          /*
+          if (i == 0 && j == 0) {
+            pointArray.push([new_x, new_y]);
+          }
+          */
         }
+      }
+      // pointArray.push(pointArray[pointArray.length - 1]);
+      for (let i = 0; i < 3; i++) {
+        pointArray.push(pointArray[i]);
       }
       return pointArray;
     }
