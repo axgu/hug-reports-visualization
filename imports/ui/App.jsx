@@ -2,7 +2,7 @@ import React from 'react';
 import { useTracker, useSubscribe } from "meteor/react-meteor-data";
 import { ThanksCollection } from '../api/ThanksCollection';
 import { ReactP5Wrapper } from "@p5-wrapper/react";
-import { WIDTH, HEIGHT, CTIME } from './globals';
+import { WIDTH, HEIGHT, RADII, OFFSET, CTIME, NUMPOINTS, NDIFF } from './globals';
 import { Shape } from './shape';
 
 const shapes = new Map();
@@ -35,8 +35,13 @@ export const App = () => {
       thanks.map((message) => {
         const objkey = message._id._str;
         if (!shapes.has(objkey)) {
-          shapes.set(objkey, new Shape(objkey));
+          /* make a new shape */
+          const radius = RADII + Math.random()*OFFSET - OFFSET/2;
+          const points = NUMPOINTS + Math.floor(Math.random()*NDIFF - NDIFF/2);
+          shapes.set(objkey, new Shape(objkey, radius, points));
         }
+
+        /* draw shape for message */
         const s = shapes.get(objkey);
         const elapsed = Date.now() - s.time.getTime();
         const color = s.updateColor();
@@ -51,7 +56,7 @@ export const App = () => {
 
       shapes.forEach((shape, key) => {
         shape.radius = shape.start_radius + shape.max_r * p5.sin(shape.theta);
-        shape.theta += .05;
+        shape.theta += .02;
         shape.pointArray = shape.makePoints();
       })
 

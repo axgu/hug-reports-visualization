@@ -9,3 +9,8 @@ export const PURPLE = ['e9ddf8', 'bdace0', 'a182d3', '835dd3', '6818d9'];
 export const COLORS = [PINK, GREEN, BLUE, PURPLE];
 
 export const CTIME = 5*1000;
+
+export const RADII = 40;
+export const OFFSET = 16
+export const NUMPOINTS = 6;
+export const NDIFF = 4;
