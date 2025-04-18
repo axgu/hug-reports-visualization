@@ -3,8 +3,11 @@ export class Shape {
     constructor(objkey, radius, numpoints) {
         this.key = objkey;
         this.time = new Date();
+        this.noiseFrame = (Math.random()*6+2)/1000;
         this.x = Math.random()*WIDTH - WIDTH / 2;
         this.y = Math.random()*HEIGHT - HEIGHT / 2;
+        this.orig_x = this.x;
+        this.orig_y = this.y;
         this.start_radius = radius;
         this.radius = radius;
         this.max_r = radius * 0.15;
@@ -12,7 +15,6 @@ export class Shape {
         this.color_palette = COLORS[Math.floor(Math.random()*COLORS.length)];
         this.color = '#' + this.color_palette[0];
         this.numpoints = numpoints;
-        console.log(this.numpoints);
         this.offArray = this.makeRadii();
         this.pointArray = this.makePoints();
         this.direction;
@@ -74,4 +76,9 @@ export class Shape {
         this.color = "#" + this.color_palette[color_index];
         return this.color
     };
+
+    updateCenter(noiseLevel, noisex, noisey) {
+      this.x = this.orig_x + noiseLevel * noisex;
+      this.y = this.orig_y + noiseLevel * noisey;
+    }
 }

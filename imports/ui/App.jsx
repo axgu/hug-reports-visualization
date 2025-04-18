@@ -25,7 +25,21 @@ export const App = () => {
       }
     }
   };
+
+
   function sketch(p5) {
+    function updateCenter(shape) {
+      let noiseLevel = 200;
+
+      // Scale the input coordinate.
+      let nt = p5.frameCount * shape.noiseFrame;
+
+      let noisex = p5.noise(nt);
+      let noisey = p5.noise(nt);
+
+      // Compute the noise values.
+      shape.updateCenter(noiseLevel, noisex, noisey);
+    }
     p5.setup = () => p5.createCanvas(WIDTH, HEIGHT, p5.WEBGL);
   
     p5.draw = () => {
@@ -58,6 +72,7 @@ export const App = () => {
         shape.radius = shape.start_radius + shape.max_r * p5.sin(shape.theta);
         shape.theta += .02;
         shape.pointArray = shape.makePoints();
+        updateCenter(shape);
       })
 
       clearShapes();
