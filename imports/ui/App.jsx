@@ -14,23 +14,14 @@ export const App = () => {
     to: new Date(),
   });
   
-  // Optional: Update the time bounds every minute or so
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setTimeBounds({
-        from: new Date(Date.now() - 1000 * 60 * 30),
-        to: new Date(),
-      });
-    }, 60000); // every minute
-  
-    return () => clearInterval(interval);
-  }, []);
-  
   const loading = useSubscribe("thanks");
-  const thanks = useTracker(() => 
-    ThanksCollection.find({timestamp:{$gte:timeBounds.from,
-      $lte: timeBounds.to,}}).fetch()
-  );
+  const thanks = useTracker(() => {
+    const oneHourAgo = new Date().getTime() - 60 * 60 * 1000;
+    return ThanksCollection.find().fetch().filter(msg => {
+      const msgTimestamp = new Date(msg.timestamp).getTime();
+      return msgTimestamp > oneHourAgo;
+    });
+  });
   
   useEffect(() => {
     console.log('Updated thanks:', thanks);
