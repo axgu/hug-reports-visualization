@@ -1,5 +1,5 @@
-import { Meteor } from 'meteor/meteor';
 import { ThanksCollection } from '/imports/api/ThanksCollection';
+import { Meteor } from 'meteor/meteor';
 import dotenv from 'dotenv';
 
 dotenv.config();
