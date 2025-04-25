@@ -3,7 +3,7 @@ export class Shape {
     constructor(objkey, radius, numpoints) {
         this.key = objkey;
         this.time = new Date();
-        this.noiseFrame = (Math.random()*6+2)/1000;
+        this.noiseFrame = (Math.random()*16-8)/1000;
         this.x = Math.random()*WIDTH - WIDTH / 2;
         this.y = Math.random()*HEIGHT - HEIGHT / 2;
         this.orig_x = this.x;
@@ -17,7 +17,6 @@ export class Shape {
         this.numpoints = numpoints;
         this.offArray = this.makeRadii();
         this.pointArray = this.makePoints();
-        this.direction;
     }
 
     makeRadii() {

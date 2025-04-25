@@ -13,4 +13,4 @@ export const CTIME = 5*1000;
 export const RADII = 40;
 export const OFFSET = 16
 export const NUMPOINTS = 6;
-export const NDIFF = 0;
+export const NDIFF = 4;

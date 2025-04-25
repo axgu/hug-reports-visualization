@@ -4,15 +4,37 @@ import { ThanksCollection } from '../api/ThanksCollection';
 import { ReactP5Wrapper } from "@p5-wrapper/react";
 import { WIDTH, HEIGHT, RADII, OFFSET, CTIME, NUMPOINTS, NDIFF } from './globals';
 import { Shape } from './shape';
+import { useEffect, useState } from 'react';
 
 const shapes = new Map();
 export const App = () => {
+
+  const [timeBounds, setTimeBounds] = useState({
+    from: new Date(Date.now() - 1000 * 60 * 30),
+    to: new Date(),
+  });
+  
+  // Optional: Update the time bounds every minute or so
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setTimeBounds({
+        from: new Date(Date.now() - 1000 * 60 * 30),
+        to: new Date(),
+      });
+    }, 60000); // every minute
+  
+    return () => clearInterval(interval);
+  }, []);
   
   const loading = useSubscribe("thanks");
   const thanks = useTracker(() => 
-    ThanksCollection.find({timestamp:{$lte:new Date(), $gte: new Date( Date.now() - 1000 * 60 * 30)}}).fetch()
+    ThanksCollection.find({timestamp:{$gte:timeBounds.from,
+      $lte: timeBounds.to,}}).fetch()
   );
-  console.log(thanks);
+  
+  useEffect(() => {
+    console.log('Updated thanks:', thanks);
+  }, [thanks]);
 
   function clearShapes() {
     for (const shape of shapes.values()) {
