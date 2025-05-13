@@ -1,4 +1,4 @@
-import { WIDTH,HEIGHT,COLORS,CTIME } from "./globals"
+import { WIDTH,HEIGHT,COLORS,CTIME,SCALE } from "./globals"
 export class Shape {
     constructor(objkey, radius, numpoints) {
         this.key = objkey;
@@ -25,21 +25,20 @@ export class Shape {
       let offArray = [];
       let x_off;
       let y_off;
-      let scale = 1.5;
       for (let i = 0; i < this.numpoints; i++) {
         for (let j = 0; j < 4; j++) {
           if (j == 0) {
-            x_off = Math.random()*scale;
-            y_off = Math.random()*scale;
+            x_off = Math.random()*SCALE;
+            y_off = Math.random()*SCALE;
           } else if (j == 1) {
-            x_off = Math.random()*scale + scale;
-            y_off = Math.random()*scale + scale;
+            x_off = Math.random()*SCALE + SCALE;
+            y_off = Math.random()*SCALE + SCALE;
           } else if (j == 2) {
-            x_off = Math.random()*scale;
-            y_off = Math.random()*scale;
+            x_off = Math.random()*SCALE;
+            y_off = Math.random()*SCALE;
           } else {
-            x_off = -Math.random()*scale - scale;
-            y_off = -Math.random()*scale - scale;
+            x_off = -Math.random()*SCALE - SCALE;
+            y_off = -Math.random()*SCALE - SCALE;
           }
           offArray.push([x_off, y_off]);
         }
@@ -63,13 +62,6 @@ export class Shape {
           
           const new_x = this.x + x_rad * Math.cos(radians);
           const new_y = this.y + y_rad * Math.sin(radians);
-        
-          /*
-          const centerX = this.orig_x + (this.offsetX || 0);
-          const centerY = this.orig_y + (this.offsetY || 0);
-          const new_x = centerX + x_rad * Math.cos(radians);
-          const new_y = centerY + y_rad * Math.sin(radians);
-          */
           pointArray.push([new_x, new_y]);
         }
       }
@@ -88,16 +80,21 @@ export class Shape {
         return this.color
     };
     
-    /*
-    updateCenter(noiseLevel, noisex, noisey) {
-      this.offsetX = noiseLevel * noisex;
-      this.offsetY = noiseLevel * noisey;
-    }
-    */
-
-    
     updateCenter(noiseLevel, noisex, noisey) {
       this.x = this.orig_x + noiseLevel * noisex;
       this.y = this.orig_y + noiseLevel * noisey;
+    };
+
+    updateCenter(noiseLevel, noisex, noisey) {
+      const proposedX = this.orig_x + noiseLevel * noisex;
+      const proposedY = this.orig_y + noiseLevel * noisey;
+    
+      const maxOffset = this.radius + 2 * SCALE;
+    
+      const halfWidth = WIDTH / 2;
+      const halfHeight = HEIGHT / 2;
+    
+      this.x = Math.min(halfWidth - maxOffset, Math.max(-halfWidth + maxOffset, proposedX));
+      this.y = Math.min(halfHeight - maxOffset, Math.max(-halfHeight + maxOffset, proposedY));
     }
 }

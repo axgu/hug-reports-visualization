@@ -7,11 +7,6 @@ import { sketch } from './sketch';
 import { shapes, updateShapes } from './shapes';
 
 export const App = () => {
-
-  const [timeBounds, setTimeBounds] = useState({
-    from: new Date(Date.now() - 1000 * 60 * 30),
-    to: new Date(),
-  });
   
   const loading = useSubscribe("thanks");
   const thanks = useTracker(() => {
