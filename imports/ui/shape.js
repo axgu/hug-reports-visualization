@@ -8,6 +8,8 @@ export class Shape {
         this.y = Math.random()*HEIGHT - HEIGHT / 2;
         this.orig_x = this.x;
         this.orig_y = this.y;
+        this.offsetX = 0;
+        this.offsetY = 0;
         this.start_radius = radius;
         this.radius = radius;
         this.max_r = radius * 0.15;
@@ -58,8 +60,16 @@ export class Shape {
           const y_off = this.offArray[4*i + j][1];
           const x_rad = this.radius + x_off;
           const y_rad = this.radius + y_off;
+          
           const new_x = this.x + x_rad * Math.cos(radians);
           const new_y = this.y + y_rad * Math.sin(radians);
+        
+          /*
+          const centerX = this.orig_x + (this.offsetX || 0);
+          const centerY = this.orig_y + (this.offsetY || 0);
+          const new_x = centerX + x_rad * Math.cos(radians);
+          const new_y = centerY + y_rad * Math.sin(radians);
+          */
           pointArray.push([new_x, new_y]);
         }
       }
@@ -70,12 +80,22 @@ export class Shape {
       return pointArray;
     }
     
+
+    
     updateColor() {
         const color_index = Math.min(this.color_palette.length - 1, Math.floor((Date.now() - this.time.getTime()) / CTIME));
         this.color = "#" + this.color_palette[color_index];
         return this.color
     };
+    
+    /*
+    updateCenter(noiseLevel, noisex, noisey) {
+      this.offsetX = noiseLevel * noisex;
+      this.offsetY = noiseLevel * noisey;
+    }
+    */
 
+    
     updateCenter(noiseLevel, noisex, noisey) {
       this.x = this.orig_x + noiseLevel * noisex;
       this.y = this.orig_y + noiseLevel * noisey;
