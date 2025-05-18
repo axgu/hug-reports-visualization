@@ -72,17 +72,10 @@ export class Shape {
       return pointArray;
     }
     
-
-    
     updateColor() {
         const color_index = Math.min(this.color_palette.length - 1, Math.floor((Date.now() - this.time.getTime()) / CTIME));
         this.color = "#" + this.color_palette[color_index];
         return this.color
-    };
-    
-    updateCenter(noiseLevel, noisex, noisey) {
-      this.x = this.orig_x + noiseLevel * noisex;
-      this.y = this.orig_y + noiseLevel * noisey;
     };
 
     updateCenter(noiseLevel, noisex, noisey) {
@@ -96,5 +89,5 @@ export class Shape {
     
       this.x = Math.min(halfWidth - maxOffset, Math.max(-halfWidth + maxOffset, proposedX));
       this.y = Math.min(halfHeight - maxOffset, Math.max(-halfHeight + maxOffset, proposedY));
-    }
+    };
 }
