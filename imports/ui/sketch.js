@@ -19,9 +19,8 @@ export const sketch = (p5) => {
       p5.background(256);
       p5.noStroke();
       shapes.forEach((s) => {
-        const elapsed = Date.now() - s.time.getTime();
-        const color = s.updateColor();
-        p5.fill(color);
+        s.updateColor();
+        p5.fill(p5.color(s.color));
         
         p5.beginShape();
         s.pointArray.map((point) => {

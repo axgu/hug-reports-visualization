@@ -1,4 +1,4 @@
-import { WIDTH,HEIGHT,COLORS,CTIME,SCALE } from "./globals"
+import { WIDTH,HEIGHT,COLORS,CTIME,CSPEED,SCALE } from "./globals"
 export class Shape {
     constructor(objkey, radius, numpoints) {
         this.key = objkey;
@@ -15,7 +15,9 @@ export class Shape {
         this.max_r = radius * 0.15;
         this.theta = 0;
         this.color_palette = COLORS[Math.floor(Math.random()*COLORS.length)];
-        this.color = '#' + this.color_palette[0];
+        this.color_change = 0.0;
+        this.color_idx = 0
+        this.color = this.color_palette[this.color_idx];
         this.numpoints = numpoints;
         this.offArray = this.makeRadii();
         this.pointArray = this.makePoints();
@@ -73,9 +75,22 @@ export class Shape {
     }
     
     updateColor() {
-        const color_index = Math.min(this.color_palette.length - 1, Math.floor((Date.now() - this.time.getTime()) / CTIME));
-        this.color = "#" + this.color_palette[color_index];
-        return this.color
+      if (this.color_idx < this.color_palette.length - 1) {
+        const [r1, g1, b1] = this.color_palette[this.color_idx];
+        const [r2, g2, b2] = this.color_palette[this.color_idx + 1];
+
+        const r = r1 + (r2 - r1) * this.color_change;
+        const g = g1 + (g2 - g1) * this.color_change;
+        const b = b1 + (b2 - b1) * this.color_change;
+
+        this.color = [r, g, b];
+
+        this.color_change += CSPEED;
+        if (this.color_change >= 1) {
+          this.color_change = 0;
+          this.color_idx++;
+        }
+      }
     };
 
     updateCenter(noiseLevel, noisex, noisey) {
