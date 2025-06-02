@@ -17,8 +17,6 @@ export const clearShapes = () => {
 
 export const updateShapes = (objkey) => {
     if (!shapes.has(objkey)) {
-        const radius = RADII + Math.random()*OFFSET - OFFSET/2;
-        const points = NUMPOINTS + Math.floor(Math.random()*NDIFF - NDIFF/2);
-        shapes.set(objkey, new Shape(objkey, radius, points));
+        shapes.set(objkey, new Shape(objkey));
     }
 };

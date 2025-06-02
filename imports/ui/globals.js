@@ -33,12 +33,10 @@ export const TEAL = [
 ];
 
 export const COLORS = [PINK, GREEN, BLUE, TEAL];
-
-export const CTIME = 5*1000;
 export const CSPEED = 0.005;
 
 export const RADII = 40;
 export const OFFSET = 16
 export const NUMPOINTS = 6;
-export const NDIFF = 4;
+export const NDIFF = 2;
 export const SCALE = 1.5;

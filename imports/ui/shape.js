@@ -1,23 +1,45 @@
-import { WIDTH,HEIGHT,COLORS,CTIME,CSPEED,SCALE } from "./globals"
+import { WIDTH,HEIGHT,COLORS,CSPEED,SCALE } from "./globals"
 export class Shape {
-    constructor(objkey, radius, numpoints) {
+
+    constructor(objkey) {
+        this.p5 = null;
         this.key = objkey;
         this.time = new Date();
-        this.noiseFrame = (Math.random()*16-8)/1000;
-        this.x = Math.random()*WIDTH - WIDTH / 2;
-        this.y = Math.random()*HEIGHT - HEIGHT / 2;
-        this.orig_x = this.x;
-        this.orig_y = this.y;
-        this.offsetX = 0;
-        this.offsetY = 0;
-        this.start_radius = radius;
-        this.radius = radius;
-        this.max_r = radius * 0.15;
+        this.noiseFrame = 0;
+        this.x = 0;
+        this.y = 0;
+        this.base = null;
+        this.pos = null;
+        this.nt = 0;
+        this.wobbleAmp = 5;
+        // this.orig_x = this.x;
+        // this.orig_y = this.y;
+        this.start_radius = 0;
+        this.radius = 0;
+        this.max_r = 0;
         this.theta = 0;
         this.color_palette = COLORS[Math.floor(Math.random()*COLORS.length)];
         this.color_change = 0.0;
         this.color_idx = 0
         this.color = this.color_palette[this.color_idx];
+        this.numpoints = 0;
+        this.offArray = [];
+        this.pointArray = [];
+    }
+    initShape(p5, radius, numpoints) {
+        this.p5 = p5;
+        this.noiseFrame = (p5.random()*16-8)/1000;
+        this.x = p5.random(WIDTH) - WIDTH / 2;
+        this.y = p5.random(HEIGHT) - HEIGHT / 2;
+        this.base = p5.createVector(this.x, this.y);
+        this.pos = p5.createVector(this.x, this.y);
+        this.nt = p5.random(1000);
+        // this.orig_x = this.x;
+        // this.orig_y = this.y;
+        this.start_radius = radius;
+        this.radius = radius;
+        this.max_r = radius * 0.15;
+        this.theta = 0;
         this.numpoints = numpoints;
         this.offArray = this.makeRadii();
         this.pointArray = this.makePoints();
@@ -61,9 +83,9 @@ export class Shape {
           const y_off = this.offArray[4*i + j][1];
           const x_rad = this.radius + x_off;
           const y_rad = this.radius + y_off;
-          
-          const new_x = this.x + x_rad * Math.cos(radians);
-          const new_y = this.y + y_rad * Math.sin(radians);
+
+          const new_x = this.pos.x + x_rad * Math.cos(radians);
+          const new_y = this.pos.y + y_rad * Math.sin(radians);
           pointArray.push([new_x, new_y]);
         }
       }
@@ -91,18 +113,27 @@ export class Shape {
           this.color_idx++;
         }
       }
-    };
+    }
 
-    updateCenter(noiseLevel, noisex, noisey) {
-      const proposedX = this.orig_x + noiseLevel * noisex;
-      const proposedY = this.orig_y + noiseLevel * noisey;
-    
-      const maxOffset = this.radius + 2 * SCALE;
-    
+    updateCenter() {
+      this.nt += 0.002;
+      const noisex = (this.p5.noise(this.nt) - 0.5) * 2;
+      const noisey = (this.p5.noise(this.nt + 500) - 0.5) * 2;
+      this.base.x += noisex;
+      this.base.y += noisey;
+
       const halfWidth = WIDTH / 2;
       const halfHeight = HEIGHT / 2;
-    
-      this.x = Math.min(halfWidth - maxOffset, Math.max(-halfWidth + maxOffset, proposedX));
-      this.y = Math.min(halfHeight - maxOffset, Math.max(-halfHeight + maxOffset, proposedY));
+
+      this.base.x = this.p5.constrain(this.base.x, -halfWidth, halfWidth);
+      this.base.y = this.p5.constrain(this.base.y, -halfHeight, halfHeight);
+      
+
+      let wobbleX = this.p5.sin(this.nt * 10) * this.wobbleAmp;
+      let wobbleY = this.p5.cos(this.nt * 8) * this.wobbleAmp;
+
+      
+      this.pos.x = this.base.x + wobbleX;
+      this.pos.y = this.base.y + wobbleY;
     };
 }
